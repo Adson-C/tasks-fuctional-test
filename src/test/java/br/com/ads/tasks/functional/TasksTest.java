@@ -1,5 +1,7 @@
 package br.com.ads.tasks.functional;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -7,11 +9,15 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class TasksTest {
 	
-	public WebDriver acessarAplicacao() {
-		WebDriver driver = new ChromeDriver();
+	public WebDriver acessarAplicacao() throws MalformedURLException {
+	//	WebDriver driver = new ChromeDriver();
+		DesiredCapabilities cap = DesiredCapabilities.chrome();
+		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.6:4444/wd/hub"), cap);
 		driver.navigate().to("http://localhost:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		
@@ -19,7 +25,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void deveSalvarTarefasComSucesso() {
+	public void deveSalvarTarefasComSucesso() throws MalformedURLException {
 		WebDriver driver = acessarAplicacao();
 		
 		try {
@@ -31,7 +37,7 @@ public class TasksTest {
 		driver.findElement(By.id("task")).sendKeys("Teste via Selenium");
 		
 		// escrever a data
-		driver.findElement(By.id("dueDate")).sendKeys("27/12/2021");
+		driver.findElement(By.id("dueDate")).sendKeys("28/12/2022");
 		
 		// clicar em salvar
 		driver.findElement(By.id("saveButton")).click();
@@ -48,7 +54,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveSalvarTarefasSemDescricao() {
+	public void naodeveSalvarTarefasSemDescricao() throws MalformedURLException {
 		WebDriver driver = acessarAplicacao();
 		
 		try {
@@ -59,7 +65,7 @@ public class TasksTest {
 		// escrever a discrição
 		
 		// escrever a data
-		driver.findElement(By.id("dueDate")).sendKeys("27/12/2021");
+		driver.findElement(By.id("dueDate")).sendKeys("27/12/2022");
 		
 		// clicar em salvar
 		driver.findElement(By.id("saveButton")).click();
@@ -76,7 +82,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveSalvarTarefasSemData() {
+	public void naodeveSalvarTarefasSemData() throws MalformedURLException {
 		WebDriver driver = acessarAplicacao();
 		
 		try {
@@ -104,7 +110,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveSalvarTarefasComDataPassada() {
+	public void naodeveSalvarTarefasComDataPassada() throws MalformedURLException {
 		WebDriver driver = acessarAplicacao();
 		
 		try {
